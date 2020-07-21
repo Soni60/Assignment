@@ -1,32 +1,33 @@
-(function ()
-{
+(function() {
+    'use strict';
 
-angular.module('FirstApp', [])
-.controller('FirstController', FirstController)
+    angular.module('LunchCheck', [])
+        .controller('LunchCheckController', LunchCheckController);
 
+    LunchCheckController.$inject = ['$scope'];
 
-   function FirstController($scope)
-    {
-        $scope.name = "";
-        $scope.ChangeText = function()
-        {
-            var box = document.getElementById("box");
-             if( $scope.name === "Enjoy!" ||  $scope.name === "Too much!" )
-             {
-                  box.style.color = "green";
-                  box.style.borderColor  = "green";
-                 
+    function LunchCheckController($scope) {
+        $scope.dishes = '';
+        $scope.message = '';
+        $scope.checked = false;
+
+        $scope.checkLunch = function() {
+            if ($scope.dishes.trim().length === 0) {
+                $scope.empty = true;
+            } else {
+                $scope.checked = true;
+                $scope.empty = false;
+                var arrayDishes = $scope.dishes.split(',');
+                var arrayDishesWithoutEmptys = arrayDishes.filter(function(v) {
+                    return v.trim() !== '';
+                });
+
+                if (arrayDishesWithoutEmptys.length <= 3) {
+                    $scope.message = 'Enjoy!';
+                } else {
+                    $scope.message = 'Too much!';
+                }
             }
-             else if( $scope.name === "Please enter data first")
-             {
-                 box.style.color = "red";
-                 box.style.borderColor  = "red";
-             }
-             
-        
         };
     }
-
-
-
 })();
